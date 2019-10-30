@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace Users.Models
@@ -9,6 +8,6 @@ namespace Users.Models
         public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options)
             : base(options) { }
 
-        public DbSet<Users.Models.AppUser> User { get; set; }
+        public DbSet<AppUser> User { get; set; }
     }
 }
