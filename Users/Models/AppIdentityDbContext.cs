@@ -8,5 +8,7 @@ namespace Users.Models
     {
         public AppIdentityDbContext(DbContextOptions<AppIdentityDbContext> options)
             : base(options) { }
+
+        public DbSet<Users.Models.AppUser> User { get; set; }
     }
 }
