@@ -20,6 +20,7 @@
     <Folder Include="Views\" />
     <Folder Include="Views\Home\" />
     <Folder Include="Views\Shared\" />
+    <Folder Include="Models\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\Home.cs" />
