@@ -1,15 +1,18 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Users.Models;
 
 namespace Users.Infrastructure
 {
-    public class CustomPasswordValidator : IPasswordValidator<AppUser>
+    public class CustomPasswordValidator : PasswordValidator<AppUser>
     {
-        public Task<IdentityResult> ValidateAsync(UserManager<AppUser> manager, AppUser user, string password)
+        public override async Task<IdentityResult> ValidateAsync(UserManager<AppUser> manager, AppUser user, string password)
         {
-            List<IdentityError> errors = new List<IdentityError>();
+            IdentityResult result = await base.ValidateAsync(manager, user, password);
+
+            List<IdentityError> errors = result.Succeeded ? new List<IdentityError>() : result.Errors.ToList();
 
             if (password.ToLower().Contains(user.UserName.ToLower()))
             {
@@ -29,7 +32,7 @@ namespace Users.Infrastructure
                 });
             }
 
-            return Task.FromResult(errors.Count == 0 ? IdentityResult.Success : IdentityResult.Failed(errors.ToArray()));
+            return errors.Count == 0 ? IdentityResult.Success : IdentityResult.Failed(errors.ToArray());
         }
     }
 }
