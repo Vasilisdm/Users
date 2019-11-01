@@ -8,7 +8,7 @@ namespace Users.Infrastructure
     {
         public Task<IdentityResult> ValidateAsync(UserManager<AppUser> manager, AppUser user)
         {
-            if (user.Email.ToLower().EndsWith("@example.com", System.StringComparison.CurrentCulture))
+            if (user.Email.ToLower().EndsWith("@example.com"))
             {
                 return Task.FromResult(IdentityResult.Success);
             }
