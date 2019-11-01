@@ -22,6 +22,8 @@ namespace Users
         {
             services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
 
+            services.AddTransient<IUserValidator<AppUser>, CustomUserValidator>();
+
             services.AddDbContext<AppIdentityDbContext>(options =>
                     options.UseSqlite(Configuration.GetConnectionString("IdentityDbContext")));
 
