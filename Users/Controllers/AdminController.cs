@@ -78,6 +78,58 @@ namespace Users.Controllers
 
 
         [HttpPost]
+        public async Task<IActionResult> Edit(string id, string email, string password)
+        {
+            AppUser user = await userManager.FindByIdAsync(id);
+
+            if (user != null)
+            {
+                user.Email = email;
+                IdentityResult validEmail = await _userValidator.ValidateAsync(userManager, user);
+
+                if (!validEmail.Succeeded)
+                {
+                    AddErrorsFromResult(validEmail);
+                }
+
+                IdentityResult validPass = null;
+                if (!string.IsNullOrEmpty(password))
+                {
+                    validPass = await _passwordValidator.ValidateAsync(userManager, user ,password);
+
+                    if (validPass.Succeeded)
+                    {
+                        user.PasswordHash = _passwordHasher.HashPassword(user, password);
+                    }
+                    else
+                    {
+                        AddErrorsFromResult(validPass);
+                    }
+                }
+
+                if ((validEmail.Succeeded && validPass == null) || (validEmail.Succeeded && password != string.Empty && validPass.Succeeded))
+                {
+                    IdentityResult result = await userManager.UpdateAsync(user);
+
+                    if (result.Succeeded)
+                    {
+                        RedirectToAction("Index"); 
+                    }
+                    else
+                    {
+                        AddErrorsFromResult(result);
+                    }
+                }
+            }
+            else
+            {
+                ModelState.AddModelError("", "User not found");
+            }
+            return View(user);
+        }
+
+
+        [HttpPost]
         public async Task<IActionResult> Delete(string Id)
         {
             AppUser user = await userManager.FindByIdAsync(Id);
