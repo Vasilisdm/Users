@@ -113,7 +113,7 @@ namespace Users.Controllers
 
                     if (result.Succeeded)
                     {
-                        RedirectToAction("Index"); 
+                        return RedirectToAction("Index"); 
                     }
                     else
                     {
