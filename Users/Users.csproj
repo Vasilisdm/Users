@@ -29,6 +29,7 @@
     <Folder Include="Views\Admin\" />
     <Folder Include="Infrastructure\" />
     <Folder Include="Views\Account\" />
+    <Folder Include="Views\RoleAdmin\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Views\Home.cs" />
