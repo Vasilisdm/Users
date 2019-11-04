@@ -5,6 +5,7 @@ using Users.Models;
 
 namespace Users.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         [AllowAnonymous]
