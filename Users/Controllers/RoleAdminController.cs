@@ -63,7 +63,52 @@ namespace Users.Controllers
                 Members = members,
                 NonMembers = nonMembers
             });
-        }    
+        }
+
+
+        [HttpPost]
+        public async Task<IActionResult> Edit(RoleModificationModel model)
+        {
+            IdentityResult result;
+
+            if (ModelState.IsValid)
+            {
+                foreach (string userId in model.IdsToAdd ?? new string[] { })
+                {
+                    AppUser user = await _userManager.FindByIdAsync(userId);
+                    if (user!=null)
+                    {
+                        result = await _userManager.AddToRoleAsync(user, model.RoleName);
+                        if (!result.Succeeded)
+                        {
+                            AddErrorsFromResult(result);
+                        }
+                    }
+                }
+
+                foreach (string userId in model.IdsToDelete ?? new string[] { })
+                {
+                    AppUser user = await _userManager.FindByIdAsync(userId);
+                    if (user!=null)
+                    {
+                        result = await _userManager.RemoveFromRoleAsync(user, model.RoleName);
+                        if (!result.Succeeded)
+                        {
+                            AddErrorsFromResult(result);
+                        }
+                    }
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                return RedirectToAction(nameof(Index));
+            }
+            else
+            {
+                return await Edit(model.RoleId);
+            }
+        }
     
 
         [HttpPost]
