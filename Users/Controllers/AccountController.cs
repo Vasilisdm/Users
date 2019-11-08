@@ -12,17 +12,27 @@ namespace Users.Controllers
         private UserManager<AppUser> _userManager;
         private SignInManager<AppUser> _signInManager;
 
+
         public AccountController(UserManager<AppUser> usrMgr, SignInManager<AppUser> signInMgr)
         {
             _userManager = usrMgr;
             _signInManager = signInMgr;
         }
+        
 
         [AllowAnonymous]
         public IActionResult Login(string returnUrl)
         {
             ViewBag.returnUrl = returnUrl;
             return View();
+        }
+
+
+        [Authorize]
+        public async Task<IActionResult> Logout()
+        {
+            await _signInManager.SignOutAsync();
+            return RedirectToAction("Index", "Home");
         }
 
 
