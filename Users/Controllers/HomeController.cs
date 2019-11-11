@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Users.Models;
 using System.Threading.Tasks;
+using System.ComponentModel.DataAnnotations;
 
 namespace Users.Controllers
 {
@@ -26,6 +27,21 @@ namespace Users.Controllers
 
         [Authorize]
         public async Task<IActionResult> UserProps() => View(await CurrentUser);
+
+
+        [Authorize]
+        public async Task<IActionResult> UserProps([Required] Cities city, [Required] QualificationLevels qualifications)
+        {
+            if (ModelState.IsValid)
+            {
+                AppUser user = await CurrentUser;
+                user.City = city;
+                user.Qualifications = qualifications;
+                await _userManager.UpdateAsync(user);
+                return RedirectToAction(nameof(Index));
+            }
+            return View(await CurrentUser);
+        }
 
 
         private Dictionary<string, object> GetData(string actionName) =>
