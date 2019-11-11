@@ -24,6 +24,10 @@ namespace Users.Controllers
         public IActionResult OtherAction() => View("Index", GetData(nameof(OtherAction)));
 
 
+        [Authorize]
+        public async Task<IActionResult> UserProps() => View(await CurrentUser);
+
+
         private Dictionary<string, object> GetData(string actionName) =>
             new Dictionary<string, object>
             {
