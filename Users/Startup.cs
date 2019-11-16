@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Users.Models;
 using Users.Infrastructure;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Users
 {
@@ -23,6 +24,8 @@ namespace Users
             services.AddTransient<IPasswordValidator<AppUser>, CustomPasswordValidator>();
 
             services.AddTransient<IUserValidator<AppUser>, CustomUserValidator>();
+
+            services.AddSingleton<IClaimsTransformation, LocationClaimsProvider>();
 
             services.AddDbContext<AppIdentityDbContext>(options =>
                     options.UseSqlite(Configuration.GetConnectionString("IdentityDbContext")));
