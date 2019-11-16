@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Users.Models;
 using Users.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
 
 namespace Users
 {
@@ -29,6 +30,15 @@ namespace Users
 
             services.AddDbContext<AppIdentityDbContext>(options =>
                     options.UseSqlite(Configuration.GetConnectionString("IdentityDbContext")));
+
+            services.AddAuthorization(opts =>
+            {
+                opts.AddPolicy("DCUsers", policy =>
+                {
+                    policy.RequireRole("Users");
+                    policy.RequireClaim(ClaimTypes.StateOrProvince, "DC");
+                });
+            });
 
             services.AddIdentity<AppUser, IdentityRole>(opts => {
                     opts.User.RequireUniqueEmail = true;
