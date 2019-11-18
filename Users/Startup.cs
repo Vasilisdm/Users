@@ -8,6 +8,7 @@ using Users.Models;
 using Users.Infrastructure;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Users
 {
@@ -28,6 +29,8 @@ namespace Users
 
             services.AddSingleton<IClaimsTransformation, LocationClaimsProvider>();
 
+            services.AddTransient<IAuthorizationHandler, BlockUsersHandler>();
+
             services.AddDbContext<AppIdentityDbContext>(options =>
                     options.UseSqlite(Configuration.GetConnectionString("IdentityDbContext")));
 
@@ -37,6 +40,11 @@ namespace Users
                 {
                     policy.RequireRole("Users");
                     policy.RequireClaim(ClaimTypes.StateOrProvince, "DC");
+                });
+                opts.AddPolicy("NotBob", policy =>
+                {
+                    policy.RequireAuthenticatedUser();
+                    policy.AddRequirements(new BlockUsersRequirement("Bob"));
                 });
             });
 
