@@ -31,6 +31,8 @@ namespace Users
 
             services.AddTransient<IAuthorizationHandler, BlockUsersHandler>();
 
+            services.AddTransient<IAuthorizationHandler, DocumentAuthorizationHandler>();
+
             services.AddDbContext<AppIdentityDbContext>(options =>
                     options.UseSqlite(Configuration.GetConnectionString("IdentityDbContext")));
 
@@ -45,6 +47,14 @@ namespace Users
                 {
                     policy.RequireAuthenticatedUser();
                     policy.AddRequirements(new BlockUsersRequirement("Bob"));
+                });
+                opts.AddPolicy("AuthorsAndEditors", policy =>
+                {
+                    policy.AddRequirements(new DocumentAuthorizationRequirement
+                    {
+                        AllowAuthors = true,
+                        AllowEditors = true
+                    });
                 });
             });
 
