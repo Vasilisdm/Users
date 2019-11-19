@@ -58,6 +58,12 @@ namespace Users
                 });
             });
 
+            services.AddAuthentication().AddGoogle(opts =>
+            {
+                opts.ClientId = "client id goes here";
+                opts.ClientSecret = "client secret goes here";
+            });
+
             services.AddIdentity<AppUser, IdentityRole>(opts => {
                     opts.User.RequireUniqueEmail = true;
                     opts.Password.RequiredLength = 6;
