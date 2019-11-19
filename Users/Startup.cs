@@ -60,8 +60,8 @@ namespace Users
 
             services.AddAuthentication().AddGoogle(opts =>
             {
-                opts.ClientId = "client id goes here";
-                opts.ClientSecret = "client secret goes here";
+                opts.ClientId = "16460336012-997nl59rgqb5c502v7avo878jilu8c1k.apps.googleusercontent.com";
+                opts.ClientSecret = "ANTmX_OJoV5mntyVy20sKDxk";
             });
 
             services.AddIdentity<AppUser, IdentityRole>(opts => {
