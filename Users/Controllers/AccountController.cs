@@ -43,6 +43,19 @@ namespace Users.Controllers
         }
 
 
+        [AllowAnonymous]
+        public IActionResult GoogleLogin(string returnUrl)
+        {
+            string redirectUrl = Url.Action("GoogleResponse", "Account",
+                new { ReturnUrl = returnUrl }
+            );
+
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties("Google", redirectUrl);
+
+            return new ChallengeResult("Google", properties);
+        }
+
+
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
